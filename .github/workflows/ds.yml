@@ -1,0 +1,103 @@
+name: Daily Sentiment
+
+on:
+  schedule:
+    - cron: '55 8 * * *'   # 08:55 UTC = 16:55 SGT; adjust to 09:00 for 17:00 SGT if you prefer
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install deps
+        run: pip install -r requirements.txt
+
+      - name: Generate DS
+        env:
+          COINGLASS_API_KEY: ${{ secrets.COINGLASS_API_KEY }}
+        run: |
+          python - << 'PY'
+import os, json, requests
+from bs4 import BeautifulSoup
+from datetime import datetime
+
+def fetch_crypto_fg():
+    r = requests.get("https://api.alternative.me/fng/?limit=2", timeout=30).json()
+    t, y = r["data"][0], r["data"][1]
+    return {"today": t["value"], "yesterday": y["value"],
+            "delta": int(t["value"]) - int(y["value"]),
+            "classification": t["value_classification"]}
+
+def fetch_stock_fg():
+    # Placeholder (CNN doesn’t provide a free API). I’ll still post real-time public values when I generate the DS here.
+    return {"today":"—","yesterday":"—","delta":"—","classification":"—"}
+
+def fetch_funding(symbol):
+    key = os.getenv("COINGLASS_API_KEY")
+    if not key:
+        return {"note": "Add COINGLASS_API_KEY in repo Secrets to enable live funding."}
+    h = {"coinglassSecret": key}
+    url = "https://open-api.coinglass.com/api/futures/funding_rates"
+    out = {}
+    for s in [symbol]:
+        try:
+            d = requests.get(url, headers=h, params={"symbol": s}, timeout=30).json()
+            out[s] = d
+        except Exception as e:
+            out[s] = {"error": str(e)}
+    return out
+
+def fetch_obv(symbol):
+    # Aiolux often needs JS; this will be filled by me in the posted DS if the page is scrapeable that day.
+    return {"symbol": symbol, "obv": "—"}
+
+def fetch_sbet():
+    # StrategicETHReserve has no public API; this placeholder keeps the pipeline intact.
+    return {"treasury":"—","liquidity":"—","mcap":"—","holders":"—","whale_moves":"—"}
+
+def fetch_putcall_vix_dxy():
+    # Placeholders; I’ll fetch live numbers when I post DS here.
+    return {"equity_pc":"—","total_pc":"—","vix_today":"—","vix_yday":"—","dxy_today":"—","dxy_yday":"—"}
+
+now = datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC")
+data = {
+  "generated_at": now,
+  "crypto_fg": fetch_crypto_fg(),
+  "stock_fg": fetch_stock_fg(),
+  "funding": {"BTC": fetch_funding("BTC"), "ETH": fetch_funding("ETH")},
+  "btc_obv": fetch_obv("BTCUSD"),
+  "eth_obv": fetch_obv("ETHUSD"),
+  "sbet": fetch_sbet(),
+  "other": fetch_putcall_vix_dxy()
+}
+
+open("daily_sentiment.json","w").write(json.dumps(data, indent=2))
+md = f"""# 📊 Daily Sentiment (auto build)
+Generated: {now}
+
+1) **Crypto F&G**: {data['crypto_fg']['today']} ({data['crypto_fg']['classification']}) | Y: {data['crypto_fg']['yesterday']} | Δ: {data['crypto_fg']['delta']}
+2) **Stock F&G**: {data['stock_fg']['today']} | Y: {data['stock_fg']['yesterday']} | Δ: {data['stock_fg']['delta']}
+3) **Funding**: (filled via CoinGlass if key present) 
+4) **Put/Call**: —
+5) **VIX/DXY**: —
+6) **OBV BTC/ETH**: —
+7) **SBET**: —
+"""
+open("daily_sentiment.md","w").write(md)
+PY
+
+      - name: Commit DS artifacts
+        run: |
+          git config user.name "ds-bot"
+          git config user.email "ds-bot@users.noreply.github.com"
+          git add daily_sentiment.json daily_sentiment.md
+          git commit -m "Daily Sentiment $(date -u +'%Y-%m-%d %H:%M UTC')" || echo "No changes"
+          git push
