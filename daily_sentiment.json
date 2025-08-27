@@ -1,0 +1,46 @@
+{
+  "generated_at": "2025-08-27 10:09 UTC",
+  "crypto_fg": {
+    "today": "51",
+    "yesterday": "48",
+    "delta": 3,
+    "classification": "Neutral"
+  },
+  "stock_fg": {
+    "today": "\u2014",
+    "yesterday": "\u2014",
+    "delta": "\u2014",
+    "classification": "\u2014"
+  },
+  "funding": {
+    "BTC": {
+      "note": "Add COINGLASS_API_KEY in repo Secrets to enable live funding."
+    },
+    "ETH": {
+      "note": "Add COINGLASS_API_KEY in repo Secrets to enable live funding."
+    }
+  },
+  "btc_obv": {
+    "symbol": "BTCUSD",
+    "obv": "\u2014"
+  },
+  "eth_obv": {
+    "symbol": "ETHUSD",
+    "obv": "\u2014"
+  },
+  "sbet": {
+    "treasury": "\u2014",
+    "liquidity": "\u2014",
+    "mcap": "\u2014",
+    "holders": "\u2014",
+    "whale_moves": "\u2014"
+  },
+  "other": {
+    "equity_pc": "\u2014",
+    "total_pc": "\u2014",
+    "vix_today": "\u2014",
+    "vix_yday": "\u2014",
+    "dxy_today": "\u2014",
+    "dxy_yday": "\u2014"
+  }
+}
