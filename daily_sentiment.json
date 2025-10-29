@@ -1,9 +1,9 @@
 {
-  "generated_at": "2025-10-28 08:59 UTC",
+  "generated_at": "2025-10-29 08:59 UTC",
   "crypto_fg": {
-    "today": "50",
-    "yesterday": "51",
-    "delta": -1,
+    "today": "51",
+    "yesterday": "50",
+    "delta": 1,
     "classification": "Neutral"
   },
   "stock_fg": {
