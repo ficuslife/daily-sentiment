@@ -1,7 +1,7 @@
 # 📊 Daily Sentiment (auto build)
-Generated: 2025-11-09 08:58 UTC
+Generated: 2025-11-10 08:59 UTC
 
-1) **Crypto F&G**: 22 (Extreme Fear) | Y: 20 | Δ: 2
+1) **Crypto F&G**: 29 (Fear) | Y: 22 | Δ: 7
 2) **Stock F&G**: — | Y: — | Δ: —
 3) **Funding**: (filled via CoinGlass if key present)
 4) **Put/Call**: —
