@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-04-30 10:30 UTC",
+  "generated_at": "2026-05-01 10:11 UTC",
   "crypto_fg": {
-    "today": "29",
-    "yesterday": "26",
-    "delta": 3,
+    "today": "26",
+    "yesterday": "29",
+    "delta": -3,
     "classification": "Fear"
   },
   "stock_fg": {
