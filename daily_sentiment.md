@@ -1,5 +1,5 @@
 # 📊 Daily Sentiment (auto build)
-Generated: 2026-06-06 10:46 UTC
+Generated: 2026-06-07 10:57 UTC
 
 1) **Crypto F&G**: 12 (Extreme Fear) | Y: 12 | Δ: 0
 2) **Stock F&G**: — | Y: — | Δ: —
